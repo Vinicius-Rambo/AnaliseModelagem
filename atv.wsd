@@ -1,0 +1,56 @@
+@startuml  
+
+actor "Academicos" as acad
+actor "Estudantes" as est 
+actor "Professor" as prof 
+actor "SistemaMEC" as MEC
+
+
+rectangle "SmartBiblio"{
+'Usuario
+  usecase "buscar livros" as buscar 
+  usecase "Registrar retirada" as registrar_retirada
+  usecase "Devolver livros" as devolver 
+  usecase "Quitar valores pendentes" as quitar 
+  usecase "Entrar na fila de espera" as entrar_fila
+
+  usecase "Agendar cabines individuais" as agendar_cabine
+  usecase "Indicar compra" as indicar_compra
+
+'Sistema 
+  usecase "Acionar alto custo" as acionar_diretoria
+  usecase "Comprovar matricula" as matricula
+  usecase "vasculhar historico" as vasculhar 
+  usecase "Suspender conta" as suspender
+  usecase "Deseja imprimir comprovante " as imprimir
+
+
+}
+
+est ..|> acad 
+prof ..|> acad 
+
+acad -- buscar
+acad -- registrar_retirada
+acad -- devolver
+
+est -- agendar_cabine
+prof -- indicar_compra
+mec -- matricula
+
+quitar --> devolver : <<extends>>
+entrar_fila --> buscar: <<extends>>
+acionar_diretoria --> indicar_compra : <<extends>>
+imprimir --> registrar_retirada : <<extends>>
+imprimir --> quitar :<<extends>>
+
+
+registrar_retirada --> matricula : <<include>>
+indicar_compra --> matricula : <<include>>
+agendar_cabine --> matricula : <<include>>
+agendar_cabine --> vasculhar : : <<include>>
+
+
+
+
+@enduml
